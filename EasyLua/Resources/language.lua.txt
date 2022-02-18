@@ -1,0 +1,110 @@
+﻿--[[
+
+]]
+
+--require "strict.lua"
+
+local __cls = {}
+
+local oopMetaTable = {
+    __index = function(self, key)
+        local className = self.__class.__clsName
+        while (true) do
+            --先找类型模板
+            local class = __FindBaseClass(className)
+            if (not class) then
+                -- TODO: index nil时性能问题
+                return nil
+            end
+
+            local classVal = rawget(class, key)
+
+            if (classVal) then
+                -- 缓存防止每次都重新找值
+                rawset(self, key, classVal)
+                return classVal
+            end
+            className = class.__baseClsName
+        end
+    end,
+}
+
+---@class Class
+local Class = {
+    __clsName,
+    __baseClsName,
+}
+
+function Class:GetClassName()
+    return self.__clsName
+end
+
+function Class:GetBaseName()
+    return self.__baseClsName
+end
+
+---@return any
+function __FindBaseClass(className)
+    if (not className) or (className == "") then
+        return nil
+    end
+
+    local base = __cls[className]
+    return base
+end
+
+---@param  cls Class
+---@param name string
+---@param baseClsName string
+function RegClass(cls, name, baseClsName)
+    local c = __cls[name]
+    if c then
+        error("class already exist: " .. name)
+    end
+    if (not cls) then
+        error("not class specified: " .. name)
+    end
+    local classMeta = {
+        __index = Class
+    }
+    setmetatable(cls, classMeta)
+    cls.__clsName = name
+    cls.__baseClsName = baseClsName or "LuaObject"
+    __cls[name] = cls
+end
+
+---@generic ClsType
+---@param cls ClsType or string
+---@return ClsType
+function NewClass(cls, ...)
+    local clsName = cls.__clsName or cls
+    local class = __cls[clsName]
+    if (not class) then
+        error(tostring(clsName) .. " class is nil can not create instance")
+    end
+    local ins = {}
+    ins.__class = class
+    setmetatable(ins, oopMetaTable)
+    local ctor = ins.Ctor
+    if ctor then
+        ctor(ins, ...)
+    end
+    return ins
+end
+
+---所有EasyLua类型的终极父类
+---@class LuaObject
+local LuaObject = {
+    __clsName = "LuaObject",
+    __baseClsName = "",
+}
+
+function LuaObject:GetClassName()
+    return self.__class:GetClassName()
+end
+
+function LuaObject:GetBaseName()
+    return self.__class:GetBaseName()
+end
+
+RegClass(LuaObject, "LuaObject", "")

@@ -1,0 +1,7 @@
+﻿---@class ExampleBaseClass
+---@field public baseCount number
+ExampleBaseClass = {}
+
+function ExampleBaseClass:PrintClassName()
+    print("call form ExampleBaseClass")
+end

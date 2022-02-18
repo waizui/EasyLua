@@ -1,0 +1,61 @@
+﻿---@class ExampleCode:ExampleBaseClass
+---@field public speed number
+---@field public progress System.Single
+---@field public color UnityEngine.Color
+---@field public vec3 UnityEngine.Vector3
+---@field public cam UnityEngine.Camera
+---@field public obj UnityEngine.GameObject
+---@field public string System.String
+---@field public bool System.Boolean
+---@field public array UnityEngine.GameObject[]
+---@field public intArray System.Int32[]
+---@field public luaRef ExampleCode
+ExampleCode = {}
+
+function ExampleCode:Ctor()
+    print("call from Constructor")
+    self.speed = self.speed or 0
+end
+
+function ExampleCode:Awake()
+    print("call from awake")
+    print(self.string)
+end
+
+function ExampleCode:Start()
+    self:LuaReference()
+end
+
+function ExampleCode:OnEnable()
+    self:NewClassExample()
+end
+
+function ExampleCode:Rotate()
+    local r = CS.UnityEngine.Vector3.up * CS.UnityEngine.Time.deltaTime * self.speed
+    self.transform:Rotate(r)
+
+    for i = 0, self.array.Length - 1 do
+        self.array[i].transform:Rotate(r)
+    end
+end
+
+function ExampleCode:Update()
+    self:Rotate()
+end
+
+function ExampleCode:PrintClassName()
+    ExampleBaseClass.PrintClassName(self)
+    print("call form ExampleCode")
+end
+
+function ExampleCode:LuaReference()
+    print("lua class reference:------------Start")
+    self.luaRef:PrintClassName()
+    print("lua class reference:------------End")
+end
+
+function ExampleCode:NewClassExample()
+    ---@type ExampleNewClass
+    local class = NewClass(ExampleNewClass, "this is newClass")
+    print(class:GetStringValue())
+end

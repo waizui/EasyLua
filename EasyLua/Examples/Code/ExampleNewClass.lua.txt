@@ -1,0 +1,13 @@
+﻿---@class ExampleNewClass
+---@field private mStrValue string
+ExampleNewClass = {}
+
+---@param name string
+function ExampleNewClass:Ctor(name)
+    self.mStrValue = name
+end
+
+---@return string
+function ExampleNewClass:GetStringValue()
+    return self.mStrValue or "Not Defined"
+end 
