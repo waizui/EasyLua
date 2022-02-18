@@ -15,3 +15,5 @@ easylua 是一个依赖于xlua的lua运行模块，目的是用最符合unity使
      print("hellow world")
   end
 ```
+
+支持拖拽字段，与Mono脚本使用方法一致
