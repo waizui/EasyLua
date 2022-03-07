@@ -14,7 +14,7 @@ namespace EasyLua.Editor {
 
         protected void OnEnable() {
             mLua = target as EasyBehaviour;
-            if (mLua.LuaCode != null) {
+            if (mLua && mLua.LuaCode) {
                 AddWatcher();
             }
         }
@@ -96,9 +96,10 @@ namespace EasyLua.Editor {
 
         private void DrawScriptFields() {
             var paras = mLua.GetLuaParams();
-            if (paras==null) {
+            if (paras == null) {
                 return;
             }
+
             for (int i = 0; i < paras.Length; i++) {
                 var para = paras[i];
                 if (!string.IsNullOrEmpty(para.TypeName)) {
@@ -159,9 +160,10 @@ namespace EasyLua.Editor {
 
         private EasyLuaParam[] UpdateParams() {
             var fields = ParseScriptFields();
-            if (fields==null) {
+            if (fields == null) {
                 return null;
             }
+
             var newParas = fields.Select((f) => new EasyLuaParam() {
                 TypeName = f.GetFieldType(),
                 name = f.GetFieldName()
