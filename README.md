@@ -1,6 +1,6 @@
 # Easylua
 
-easylua 是一个依赖于xlua的lua运行模块，目的是用最符合unity使用习惯的方式来写lua代码。
+easylua 是一个依赖于[xlua](https://github.com/Tencent/xLua)的lua运行模块，目的是用最符合unity使用习惯的方式来写lua代码。
 
 
 基本的脚本写法与c#几乎相同
