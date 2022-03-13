@@ -141,8 +141,22 @@ namespace EasyLua.Editor {
                 return paras;
             }
 
-            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            var script = (TextAsset) AssetDatabase.LoadAssetAtPath(path, typeof(TextAsset));
+            string path = null;
+
+            for (int i = 0; i < guids.Length; i++) {
+                var p = AssetDatabase.GUIDToAssetPath(guids[i]);
+                if (p != null && p.EndsWith("lua.txt")) {
+                    path = p;
+                    break;
+                }
+            }
+
+            if (path == null) {
+                return paras;
+            }
+
+
+            var script = (TextAsset)AssetDatabase.LoadAssetAtPath(path, typeof(TextAsset));
             var lexer = new EasyLuaLexer(script.text);
 
             var baseClass = lexer.GetBaseClassName();
@@ -163,7 +177,8 @@ namespace EasyLua.Editor {
                 return null;
             }
 
-            var newParas = fields.Select((f) => new EasyLuaParam() {
+            var newParas = fields.Select((f) => new EasyLuaParam()
+            {
                 TypeName = f.GetFieldType(),
                 name = f.GetFieldName()
             }).ToArray();
