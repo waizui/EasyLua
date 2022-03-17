@@ -24,9 +24,6 @@ namespace EasyLua {
 
         public static void Delete() {
             if (instance) {
-#if UNITY_EDITOR
-                instance.mLuaEnv.DoString("Util.PrintRef()");
-#endif
                 instance.mLuaEnv.Dispose();
                 DestroyImmediate(instance);
                 instance = null;
