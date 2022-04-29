@@ -22,12 +22,26 @@ namespace EasyLua {
             return instance;
         }
 
-        public static void Delete() {
+        public static bool Delete() {
             if (instance) {
-                instance.mLuaEnv.Dispose();
-                DestroyImmediate(instance);
+                instance.mEnvTable.Dispose();
+                instance.mEnvTable = null;
+
+                // var c = @"
+                // local util = require 'xlua.util'
+                // util.print_func_ref_by_csharp()";
+                // instance.mLuaEnv.DoString(c);
+                instance.mLuaEnv.Tick();
+                // 缓存luaFun之后 会导致引用在dispose的时候无法消除报错
+                //instance.mLuaEnv.Dispose();
+                instance.mLuaEnv = null;
+                DestroyImmediate(instance.gameObject);
+
                 instance = null;
+                return true;
             }
+
+            return false;
         }
 
         private LuaEnv mLuaEnv;

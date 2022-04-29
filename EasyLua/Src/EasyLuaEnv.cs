@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using EasyLua.Lexer;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XLua;
@@ -142,7 +141,10 @@ namespace EasyLua {
         }
 
         public void Dispose() {
+            mFunCaches.Clear();
+            mFunCaches = null;
             mTable.Dispose();
+            mTable = null;
         }
     }
 }
