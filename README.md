@@ -34,7 +34,7 @@ Similar syntax to c# scripts.
 
 在示例场景EasyLuaExample场景中(位于/EasyLua/Examples下) 可以找到示例用法，基本上就是将lua代码文件拖到EasyBehaviour(或继承自EasyBehaviour的脚本,示例中是TestUpdateBehaviour)脚本的LuaScript中，就可以像写C#脚本一样写lua脚本了，在Lua中声明的字段会同步在EasyBehaviour中显示。
 
-You can find examples under folder /EasyLua/Examples. Basicly, You can drag a lua script to EasyBehaviour's (or class that inherit from EasyBehaviour,for example,TestUpdateBehaviour) **luaScript** field. Then you can write the lua script just like a common  C# script, And fields Changed in lua script will be reflected in EasyBehaviour.
+You can find examples under folder /EasyLua/Examples. Basicly, You can drag a lua script to EasyBehaviour's (or class that inherit from EasyBehaviour,for example,TestUpdateBehaviour) **luaScript** field. Then you can write the lua script just like a common  C# script, And fields changed in lua script will be reflected in EasyBehaviour.
 
 ```Lua
 ---@class ExampleCode:ExampleBaseClass
