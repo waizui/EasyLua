@@ -30,7 +30,7 @@ Similar syntax to c# scripts.
 * 配合emmylua插件实现语法分析，支持VSCode和JetBrains的IDE。
 * Support syntax analysis provided by emmylua addon which is supported on both VSCode and JetBrians IDE.
 
-## 示例
+## 示例 example
 
 在示例场景EasyLuaExample场景中(位于/EasyLua/Examples下) 可以找到示例用法，基本上就是将lua代码文件拖到EasyBehaviour(或继承自EasyBehaviour的脚本,示例中是TestUpdateBehaviour)脚本的LuaScript中，就可以像写C#脚本一样写lua脚本了，在Lua中声明的字段会同步在EasyBehaviour中显示。
 
