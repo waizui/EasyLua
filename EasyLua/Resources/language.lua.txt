@@ -16,7 +16,7 @@ local oopMetaTable = {
 
             local classVal = rawget(class, key)
 
-            if (classVal) then
+            if (classVal ~= nil) then
                 -- 缓存防止每次都重新找值
                 rawset(instance, key, classVal)
                 return classVal
@@ -43,7 +43,7 @@ local Class = {
 
             local classVal = rawget(class, key)
 
-            if (classVal) then
+            if (classVal ~= nil) then
                 -- 缓存防止每次都重新找值
                 rawset(cls, key, classVal)
                 return classVal
