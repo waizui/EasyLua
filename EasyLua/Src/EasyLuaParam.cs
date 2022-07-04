@@ -107,7 +107,7 @@ namespace EasyLua {
         public Color Color {
             get {
                 if (valObj is Color) {
-                    return (Color) valObj;
+                    return (Color)valObj;
                 }
 
                 return Color.clear;
@@ -121,7 +121,7 @@ namespace EasyLua {
         public Vector3 Vector3 {
             get {
                 if (valObj is Vector3) {
-                    return (Vector3) valObj;
+                    return (Vector3)valObj;
                 }
 
                 return Vector3.zero;
@@ -242,6 +242,10 @@ namespace EasyLua {
             }
 
             if (Array != null) {
+                if (Array.Length == 0) {
+                    return null;
+                }
+
                 var arr = new object[Array.Length];
                 for (int i = 0; i < Array.Length; i++) {
                     var para = Array[i];
