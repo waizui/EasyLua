@@ -1,11 +1,5 @@
-﻿using System;
-using System.Security.Permissions;
-using System.Text.RegularExpressions;
-using EasyLua.Lexer;
-using Unity.Jobs;
+﻿using EasyLua.Lexer;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using XLua;
 using Object = System.Object;
 
