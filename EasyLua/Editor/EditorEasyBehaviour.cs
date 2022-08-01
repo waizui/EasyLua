@@ -11,7 +11,7 @@ namespace EasyLua.Editor {
         private EasyBehaviour mLua;
         private FileSystemWatcher mWatcher = new FileSystemWatcher();
 
-        protected void OnEnable() {
+        protected virtual void OnEnable() {
             mLua = target as EasyBehaviour;
             if (mLua && mLua.LuaCode) {
                 AddWatcher();
