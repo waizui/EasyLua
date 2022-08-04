@@ -41,6 +41,10 @@ namespace EasyLua {
             }
         }
 
+        public bool IsInitiated() {
+            return mEnv != null;
+        }
+
         private void InitLuaEnv() {
             if (mLuaCode == null) {
                 return;
