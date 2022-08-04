@@ -40,7 +40,10 @@ namespace EasyLua.Editor {
 
         private void DrawClassName() {
             var cls = serializedObject.targetObject as EasyBehaviour;
-            EditorGUILayout.LabelField("LUA CLASS:" + cls?.GetClassName());
+            if (cls == null || !cls.IsInitiated()) {
+                return;
+            }
+            EditorGUILayout.LabelField("LUA CLASS:" + cls.GetClassName());
         }
 
         private TextAsset DrawCodeField() {
