@@ -4,7 +4,7 @@ EasyLua 是一个依赖于[xlua](https://github.com/Tencent/xLua)的lua运行模
 
 EasyLua is a lua module based on [xlua](https://github.com/Tencent/xLua) project. It is created for writing lua scripts in unity more like writing C# scripts. 
 
-## 为什么使用EasyLua? Why use EasyLua?
+## 为什么使用EasyLua? Why EasyLua?
 如果你想:
 * 像编写C#一样编写lua脚本
 * 编写纯lua驱动或者部分lua驱动的游戏
@@ -114,3 +114,8 @@ end
 ```
 
 ![脚本示例](./pic_script.png)
+
+
+## 使用教程 tutorial
+
+[English](./tutorial.md)
