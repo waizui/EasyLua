@@ -20,23 +20,23 @@ namespace EasyLua {
         }
 
         /// <summary>
-        /// 分帧加载示例 也可以用来接入异步加载 
+        /// load all lua scripts at runtime
         /// </summary>
         /// <returns></returns>
         IEnumerator CoLoadClass() {
-            // 所有lua代码加载后才能初始化lua环境
-            var assets = GetLuaFiles();
+            TextAsset[] assets = GetLuaFiles();
             for (int i = 0 ; i < assets.Length ; i++) {
                 try {
                     EasyLuaGlobal.Get().LoadClass(assets[i].text);
                 } catch (Exception e) {
-                    Debug.LogError("载入lua代码文件时错误" + assets[i].name);
+                    Debug.LogError("error whild loading lua scripts" + assets[i].name);
                     throw;
                 }
 
                 yield return new WaitForEndOfFrame();
             }
 
+            // after all lua scripts are loaded the EasyLua can work properly
             var obj = GameObject.Instantiate(testObject, transform);
             obj.SetActive(true);
         }

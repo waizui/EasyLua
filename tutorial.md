@@ -72,7 +72,7 @@ to Register Classes other than the first one.
 * I don't recommend to use EasyBehaviour directly , just inherit it and make your own behaviour class, that could be more versatile.
 for example:
 
-```CSharp
+```C#
     public class LuaBehaviour : EasyBehaviour {
         public void CallLua(string funName, params object[] args) {
             CallLuaFun(funName, args);
@@ -102,4 +102,49 @@ for example:
 ```
 
 
+## Load lua scripts
 
+* You need to load your script to EasyLuaGlobal , Use the C# method <b> LoadClass </b> as below.
+
+  a script needs to be loaded before using it.
+
+```C#
+    EasyLuaGlobal.Get().LoadClass(string script)
+```
+
+* In most cases , load all lua scripts in advance would be a better choice. for example:
+
+```C#
+
+    private void Awake() {
+        StartCoroutine(CoLoadClass());
+    }
+
+    /// <summary>
+    /// load all lua scripts at runtime
+    /// </summary>
+    IEnumerator CoLoadClass() {
+        TextAsset[] assets = GetLuaFiles();
+        for (int i = 0 ; i < assets.Length ; i++) {
+            try {
+                EasyLuaGlobal.Get().LoadClass(assets[i].text);
+            } catch (Exception e) {
+                Debug.LogError("error whild loading lua scripts" + assets[i].name);
+                throw;
+            }
+            if (i%20 == 0) {
+                yield return new WaitForEndOfFrame();
+            }
+        }
+    }
+
+    private TextAsset[] GetLuaFiles() {
+        var folder = new string[] { "Assets/EasyLua/Examples/Code" };
+        var assets = AssetDatabase.FindAssets("t:TextAsset", folder);
+        var codes = assets.Select((g) => {
+            var path = AssetDatabase.GUIDToAssetPath(g);
+            return AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+        });
+        return codes.ToArray();
+    }
+```
