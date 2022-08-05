@@ -13,7 +13,7 @@ Open the lua script in your code editor, you will see:
 ```
 
 * First of all , a class declaration must on the top of the script. It starts with "---@class" and followed with class name.
-If there are multiple classes declararion in one single script , you need to use EasyLua built-in function <b>RegClass</b>
+If there are multiple classe declararions in one single script , you need to use EasyLua built-in function <b>RegClass</b>
 to Register Classes other than the first one.
 
 ```Lua
@@ -41,7 +41,7 @@ to Register Classes other than the first one.
 
 
 * Declare fields just below the class declaration,the field declaration must starts with "---" and then followed with "@field"
- and continue with a modifier then the field name ,and finally, the type of the field. The field can be a c# type or a lua type.
+ and continue with a modifier then the field name ,and finally, the type of the field. The field can be a C# type or a lua type.
   
   A modifier could be "public" or "private". if it's public , it will be displayed in inspector of EasyBehaviour.
 
@@ -93,6 +93,10 @@ for example:
 
         protected virtual void OnDisable() {
             CallLuaFun("OnDisable");
+        }
+
+        protected virtual void OnDestory() {
+            CallLuaFun("OnDestory");
         }
     }
 ```
