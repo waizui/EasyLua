@@ -151,3 +151,48 @@ for example:
         return codes.ToArray();
     }
 ```
+
+## Debug scripts
+For debugging, [VSCode-EmmlyLua](https://github.com/EmmyLua/VSCode-EmmyLua) and [IntelliJ-EmmyLua](https://github.com/EmmyLua/IntelliJ-EmmyLua) are both good choices. 
+
+EasyLua can work with EmmlyLua plugin properly.First,Installing EmmyLua on VScode (or intelliJ IDE) and include [emmyluaDebugger](https://github.com/EmmyLua/EmmyLuaDebugger/releases) in your project
+(for window x64 system, put it under "Assets/ThirdPlugins/EmmyLua/Editor/x64/"),then adding a text file called "luaDebugConfig.txt" in unity project root folder(same level as Assets folder)
+and paste the code below to that txt file. 
+
+```Lua
+if CS.UnityEngine.Application.platform == CS.UnityEngine.RuntimePlatform.WindowsEditor then
+    xpcall(function()
+        package.cpath = package.cpath .. ';' .. CS.UnityEngine.Application.dataPath .. '/ThirdPlugins/EmmyLua/Editor/x64/emmy_core.dll'
+        local dbg = require('emmy_core')
+        dbg.tcpConnect('localhost', 9966)
+    end, function(err)
+    end)
+end
+```
+
+The next step is create a lua debugger in you IDE. After this, open the launch settigns, change the port number to 9966,and set the "ideConnectDebugger" option to false.
+
+```Json
+{
+    "launch": {
+            "version": "0.2.0",
+            "configurations": [
+                {
+                    "type": "emmylua_new",
+                    "request": "launch",
+                    "name": "EmmyLua New Debug",
+                    "host": "localhost",
+                    "port": 9966,
+                    "ext": [
+                        ".lua",
+                        ".lua.txt",
+                        ".lua.bytes"
+                    ],
+                    "ideConnectDebugger": false
+                }
+            ]
+}
+```
+And finally, start debugging in the IDE and then run unity editor. If everything going right,you'll see "connected" on your IDE console,
+that means debugger is working properly.
+
