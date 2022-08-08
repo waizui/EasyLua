@@ -1,5 +1,8 @@
 # EasyLua tutorial
 
+## Dependencies
+First of all, [xlua](https://github.com/Tencent/xLua) project is required, you need include xlua in your project.
+
 ## Create a lua script
 
 Right click a folder then click <b>Create->LuaClass</b> to create a lua script and give it a name,for instance "ExampleCode",
@@ -69,7 +72,7 @@ to Register Classes other than the first one.
     end  
 ```
 
-* I don't recommend to use EasyBehaviour directly , just inherit it and make your own behaviour class, that could be more versatile.
+* Using EasyBehaviour directly is not recommended. Just inherit it and make your own behaviour class, that could be more versatile.
 for example:
 
 ```C#
