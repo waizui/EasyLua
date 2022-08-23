@@ -196,3 +196,43 @@ The next step is create a lua debugger in you IDE. After this, open the launch s
 And finally, start debugging in the IDE and then run unity editor. If everything going right,you'll see "connected" on your IDE console,
 that means debugger is working properly.
 
+
+
+## Advance Features
+
+### built-in fields:
+* you can access EasyBehaviour(or subclass of EasyBehaviour) instance through <b>self.this</b> in a lua script,
+ as well as transfrom and gameObjec using <b>self.transform</b> and <b>self.gameObject</b> respectively.
+
+
+### custom field painter:
+
+* you can draw your own lua type by inheriting EditorBasicFieldPainter and using CustomFieldPainter attribute ,
+for example, the color type:
+```C#
+    [CustomFieldPainter("UnityEngine.Color")]
+    public class EditorColorPainter : EditorBasicFieldPainter {
+        public override bool Draw(EasyLuaParam para) {
+            return DrawColor(para);
+        }
+
+        private bool DrawColor(EasyLuaParam para) {
+            var val = para.ValueObject;
+            if (!(val is Color)) {
+                val = Color.white;
+            }
+
+            var prev = (Color)val;
+            var newVal = EditorGUILayout.ColorField(para.name, prev);
+            if (prev != newVal) {
+                para.ValueObject = newVal;
+                return true;
+            }
+
+            return false;
+        }
+
+    }
+
+```
+

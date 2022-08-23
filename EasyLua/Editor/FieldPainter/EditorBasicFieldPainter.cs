@@ -18,6 +18,7 @@ namespace EasyLua.Editor {
     }
 
     public class EditorBasicFieldPainter {
+        // return if param was changed
         public virtual bool Draw(EasyLuaParam para) {
             var changed = false;
             if (IsInt(para)) {
