@@ -202,7 +202,7 @@ that means debugger is working properly.
 
 ### built-in fields:
 * you can access EasyBehaviour(or subclass of EasyBehaviour) instance through <b>self.this</b> in a lua script,
- as well as transfrom and gameObjec using <b>self.transform</b> and <b>self.gameObject</b> respectively.
+ as well as transfrom and gameObject using <b>self.transform</b> and <b>self.gameObject</b> respectively.
 
 
 ### custom field painter:
