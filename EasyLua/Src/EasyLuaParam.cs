@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using UnityEngine;
 using Object = System.Object;
 
@@ -9,7 +8,7 @@ namespace EasyLua {
         [NonSerialized]
         private string mTypeName;
 
-        private string LowerTypeName {
+        public string LowerTypeName {
             get { return mTypeName?.ToLower(); }
         }
 
@@ -22,6 +21,12 @@ namespace EasyLua {
                 return mTypeName;
             }
             set { mTypeName = value; }
+        }
+
+        public string RawTypeName {
+            get {
+                return mTypeName;
+            }
         }
 
         [NonSerialized]
@@ -56,14 +61,24 @@ namespace EasyLua {
         [SerializeReference]
         private EasyLuaParam[] arrObj;
 
+        [SerializeField]
+        private int mType;
+
+
         public EasyLuaParam() {
             ClearValue();
+        }
+
+        public EasyLuaParamType ParamType {
+            get {
+                return (EasyLuaParamType)mType;
+            }
         }
 
         public long Int {
             get { return (intVal); }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.Int);
                 intVal = value;
             }
         }
@@ -71,7 +86,7 @@ namespace EasyLua {
         public float Float {
             get { return (floatVal); }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.Float);
                 floatVal = value;
             }
         }
@@ -79,7 +94,7 @@ namespace EasyLua {
         public bool Bool {
             get { return boolVal == 1; }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.Boolean);
                 boolVal = value ? 1 : -1;
             }
         }
@@ -91,7 +106,7 @@ namespace EasyLua {
         public string String {
             get { return stringVal; }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.String);
                 stringVal = value;
             }
         }
@@ -99,55 +114,31 @@ namespace EasyLua {
         public EasyLuaParam[] Array {
             get { return arrObj; }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.Array);
                 arrObj = value;
-            }
-        }
-
-        public Color Color {
-            get {
-                if (valObj is Color) {
-                    return (Color)valObj;
-                }
-
-                return Color.clear;
-            }
-            set {
-                ClearValue();
-                valObj = value;
-            }
-        }
-
-        public Vector3 Vector3 {
-            get {
-                if (valObj is Vector3) {
-                    return (Vector3)valObj;
-                }
-
-                return Vector3.zero;
-            }
-            set {
-                ClearValue();
-                valObj = value;
             }
         }
 
         public UnityEngine.Object UnityObject {
             get { return unityObj; }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.UnityObject);
                 unityObj = value;
             }
         }
 
         public Object ValueObject {
             get { return valObj; }
+            set {
+                ClearValue(EasyLuaParamType.Ref);
+                valObj = value;
+            }
         }
 
         public int EnumVal {
             get { return enumVal; }
             set {
-                ClearValue();
+                ClearValue(EasyLuaParamType.Enum);
                 enumVal = value;
             }
         }
@@ -166,9 +157,10 @@ namespace EasyLua {
             target.arrObj = arrObj;
             target.arryFold = arryFold;
             target.enumVal = enumVal;
+            target.mType = mType;
         }
 
-        private void ClearValue() {
+        private void ClearValue(EasyLuaParamType type = EasyLuaParamType.None) {
             valObj = null;
             unityObj = null;
             intVal = 0;
@@ -177,31 +169,9 @@ namespace EasyLua {
             stringVal = null;
             arrObj = null;
             enumVal = -1;
+            mType = (int)type;
         }
 
-        public bool IsInt() {
-            return LowerTypeName == "number" || LowerTypeName == "system.int32";
-        }
-
-        public bool IsFloat() {
-            return LowerTypeName == "float" || LowerTypeName == "system.single";
-        }
-
-        public bool IsColor() {
-            return LowerTypeName == "color" || LowerTypeName == "unityengine.color";
-        }
-
-        public bool IsVector3() {
-            return LowerTypeName == "vector3" || LowerTypeName == "unityengine.vector3";
-        }
-
-        public bool IsBool() {
-            return LowerTypeName == "bool" || LowerTypeName == "system.boolean";
-        }
-
-        public bool IsString() {
-            return LowerTypeName == "string" || LowerTypeName == "system.string";
-        }
 
         public bool IsArray() {
             if (string.IsNullOrEmpty(mTypeName)) {
@@ -212,6 +182,41 @@ namespace EasyLua {
         }
 
         public System.Object Cast() {
+            if (ParamType == EasyLuaParamType.None) {
+                return TryCast();
+            }
+
+            switch (ParamType) {
+                case EasyLuaParamType.Int:
+                    return Int;
+                case EasyLuaParamType.Float:
+                    return Float;
+                case EasyLuaParamType.Boolean:
+                    return Bool;
+                case EasyLuaParamType.Array:
+                    return CastArray();
+                case EasyLuaParamType.String:
+                    return String;
+                case EasyLuaParamType.Enum:
+                    return EnumVal;
+                case EasyLuaParamType.Ref:
+                    return ValueObject;
+                case EasyLuaParamType.UnityObject:
+                    if (UnityObject != null) {
+                        if (UnityObject is EasyBehaviour) {
+                            var luaClass = (UnityObject as EasyBehaviour)?.GetLuaInstance();
+                            return luaClass;
+                        }
+
+                        return UnityObject;
+                    }
+                    return null;
+                default:
+                    return TryCast();
+            }
+        }
+
+        public System.Object TryCast() {
             if (UnityObject != null) {
                 if (UnityObject is EasyBehaviour) {
                     var luaClass = (UnityObject as EasyBehaviour)?.GetLuaInstance();
@@ -241,6 +246,20 @@ namespace EasyLua {
                 return String;
             }
 
+
+            var arr = CastArray();
+            if (arr != null) {
+                return arr;
+            }
+
+            if (EnumVal != -1) {
+                return EnumVal;
+            }
+
+            return null;
+        }
+
+        private System.Object CastArray() {
             if (Array != null) {
                 if (Array.Length == 0) {
                     return null;
@@ -257,8 +276,8 @@ namespace EasyLua {
                 return arr;
             }
 
-            Debug.LogError("error : EasyLuaParam not cast properly" + TypeName);
             return null;
         }
+
     }
 }

@@ -60,16 +60,53 @@ namespace EasyLua {
                 return;
             }
 
+            var type = parameters.ParamType;
+
+            if (type == EasyLuaParamType.None) {
+                TryPushParam(parameters);
+                return;
+            }
+
+            var table = Table;
+            var fieldName = parameters.name;
+            switch (type) {
+                case EasyLuaParamType.Int:
+                    table.Set(fieldName, parameters.Int);
+                    break;
+                case EasyLuaParamType.Float:
+                    table.Set(fieldName, parameters.Float);
+                    break;
+                case EasyLuaParamType.Boolean:
+                    table.Set(fieldName, parameters.Bool);
+                    break;
+                case EasyLuaParamType.Array:
+                    PushArray(parameters, table, fieldName);
+                    break;
+                case EasyLuaParamType.String:
+                    table.Set(fieldName, parameters.String);
+                    break;
+                case EasyLuaParamType.Enum:
+                    table.Set(fieldName, parameters.EnumVal);
+                    break;
+                case EasyLuaParamType.Ref:
+                    table.Set(fieldName, parameters.ValueObject);
+                    break;
+                case EasyLuaParamType.UnityObject:
+                    PushUnityObject(parameters, table, fieldName);
+                    break;
+
+                default:
+                    TryPushParam(parameters);
+                    break;
+            }
+
+        }
+
+        private void TryPushParam(EasyLuaParam parameters) {
             var table = Table;
             var fieldName = parameters.name;
             if (parameters.UnityObject != null) {
-                if (parameters.UnityObject is EasyBehaviour) {
-                    var luaClass = (parameters.UnityObject as EasyBehaviour)?.GetLuaInstance();
-                    table.Set(fieldName, luaClass);
-                    return;
-                }
-
-                table.Set(fieldName, parameters.UnityObject);
+                PushUnityObject(parameters, table, fieldName);
                 return;
             }
 
@@ -99,17 +136,35 @@ namespace EasyLua {
             }
 
             if (parameters.Array != null && parameters.Array.Length != 0) {
+                PushArray(parameters, table, fieldName);
+                return;
+            }
+
+            if (parameters.EnumVal != -1) {
+                table.Set(fieldName, parameters.EnumVal);
+            }
+        }
+
+        private void PushUnityObject(EasyLuaParam parameters, LuaTable table, string fieldName) {
+            if (parameters.UnityObject != null) {
+                if (parameters.UnityObject is EasyBehaviour) {
+                    var luaClass = (parameters.UnityObject as EasyBehaviour)?.GetLuaInstance();
+                    table.Set(fieldName, luaClass);
+                    return;
+                }
+
+                table.Set(fieldName, parameters.UnityObject);
+            }
+        }
+
+        private void PushArray(EasyLuaParam parameters, LuaTable table, string fieldName) {
+            if (parameters.Array != null && parameters.Array.Length != 0) {
                 var arr = new object[parameters.Array.Length];
                 for (int i = 0; i < parameters.Array.Length; i++) {
                     arr[i] = CastParam(parameters.Array[i]);
                 }
 
                 table.Set(fieldName, arr);
-                return;
-            }
-
-            if (parameters.EnumVal != -1) {
-                table.Set(fieldName, parameters.EnumVal);
             }
         }
 

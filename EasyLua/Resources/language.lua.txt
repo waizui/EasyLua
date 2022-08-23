@@ -31,7 +31,7 @@ local Class = {
     __clsName,
     __baseClsName,
     __index = function(cls, key)
-        --类型模板不同于实例 不用从从类型模板里找，所以直接找父类
+        -- 类型模板不同于实例 不用从从类型模板里找，所以直接找父类
         local className = cls.__baseClsName
         while (true) do
             -- 先找类型模板
@@ -122,3 +122,5 @@ function LuaObject:GetBaseName()
 end
 
 RegClass(LuaObject, "LuaObject", "")
+
+-- TODO:提供反射机制
