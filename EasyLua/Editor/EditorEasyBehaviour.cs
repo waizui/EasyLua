@@ -149,6 +149,11 @@ namespace EasyLua.Editor {
             for (int i = 0; i < guids.Length; i++) {
                 var p = AssetDatabase.GUIDToAssetPath(guids[i]);
                 if (p != null && p.EndsWith("lua.txt")) {
+                    // find raw lua file name same as class name
+                    var rawName = Path.GetFileNameWithoutExtension(p).Split('.')[0];
+                    if (rawName != className) {
+                        continue;
+                    }
                     path = p;
                     break;
                 }
