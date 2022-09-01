@@ -169,8 +169,12 @@ namespace EasyLua.Editor {
 
             var baseClass = lexer.GetBaseClassName();
             if (!string.IsNullOrWhiteSpace(baseClass)) {
-                var baseFields = ParseClassFields(baseClass);
-                paras.AddRange(baseFields);
+                if (baseClass != className) {
+                    var baseFields = ParseClassFields(baseClass);
+                    paras.AddRange(baseFields);
+                } else {
+                    Debug.LogError($"{className} has incorrect base class");
+                }
             }
 
             var fields = lexer.GetScriptFields();
