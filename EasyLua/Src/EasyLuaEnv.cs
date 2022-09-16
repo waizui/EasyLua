@@ -148,7 +148,7 @@ namespace EasyLua {
         private void PushUnityObject(EasyLuaParam parameters, LuaTable table, string fieldName) {
             if (parameters.UnityObject != null) {
                 if (parameters.UnityObject is EasyBehaviour) {
-                    var luaClass = (parameters.UnityObject as EasyBehaviour)?.GetLuaInstance();
+                    var luaClass = (parameters.UnityObject as EasyBehaviour).GetLuaInstance();
                     table.Set(fieldName, luaClass);
                     return;
                 }

@@ -1,4 +1,5 @@
 using System;
+using EasyLua.Lexer;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,7 +19,6 @@ namespace EasyLua.Editor {
     }
 
     public class EditorBasicFieldPainter {
-        // return if param was changed
         public virtual bool Draw(EasyLuaParam para) {
             var changed = false;
             if (IsInt(para)) {
@@ -110,13 +110,38 @@ namespace EasyLua.Editor {
                 return DrawEnum(para, t);
             }
 
+
             var newVal = EditorGUILayout.ObjectField(para.name, prev, t, true);
             if (prev != newVal) {
-                para.UnityObject = newVal;
+                var behaviour = newVal as EasyBehaviour;
+                if (behaviour != null) {
+                    // if there are multiple luaEnv ,find same name
+                    var curBehaviour = FindLuaClassByName(behaviour, para.TypeName);
+                    para.UnityObject = curBehaviour;
+                } else {
+                    para.UnityObject = newVal;
+                }
                 return true;
             }
-
             return false;
+        }
+
+        private EasyBehaviour FindLuaClassByName(EasyBehaviour behaviour, string typeName) {
+            var components = behaviour.GetComponents<EasyBehaviour>();
+            for (int i = 0; i < components.Length; i++) {
+                var curBehaviour = components[i];
+                var code = curBehaviour.LuaCode;
+                if (!code) {
+                    continue;
+                }
+                var className = EasyLuaLexer.TrimExtension(code.name);
+                if (className != typeName) {
+                    continue;
+                }
+                return curBehaviour;
+            }
+
+            return null;
         }
 
         private bool DrawEnum(EasyLuaParam param, Type enumType) {
