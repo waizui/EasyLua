@@ -194,23 +194,55 @@ namespace EasyLua.Editor {
                 TypeName = f.GetFieldType(),
                 name = f.GetFieldName()
             }).ToArray();
-            // 去重
             newParas = GetParamsDic(newParas).Values.ToArray();
-
             var origin = mLua.GetLuaParams();
+            var dirty = false;
+            var equal = !IsParamsCountEqual(origin, newParas);
+            if (!equal) {
+                dirty = true;
+            }
+
             if (origin != null && origin.Length > 0) {
-                var dic = GetParamsDic(origin);
+                var originDic = GetParamsDic(origin);
                 for (int i = 0; i < newParas.Length; i++) {
                     var para = newParas[i];
-                    if (dic.ContainsKey(para.name)) {
-                        CopyParam(para, dic[para.name]);
+                    if (originDic.ContainsKey(para.name)) {
+                        CopyParam(para, originDic[para.name]);
+                    } else {
+                        // if one new param not included in origin it's changed
+                        dirty = true;
                     }
                 }
             }
 
+
             mLua.SetLuaParams(newParas);
-            AssetDatabase.SaveAssets();
+            if (dirty) {
+                EditorUtility.SetDirty(mLua);
+            }
             return newParas;
+        }
+
+        private bool IsParamsCountEqual(EasyLuaParam[] origin, EasyLuaParam[] target) {
+            if (origin == null && target == null) {
+                return true;
+            }
+
+            if (origin == null) {
+                if (target.Length == 0) {
+                    return true;
+                }
+                return false;
+            }
+
+            if (target == null) {
+                if (origin.Length == 0) {
+                    return true;
+                }
+                return false;
+            }
+
+            return origin.Length != target.Length;
         }
 
         private Dictionary<string, EasyLuaParam> GetParamsDic(EasyLuaParam[] @params) {
