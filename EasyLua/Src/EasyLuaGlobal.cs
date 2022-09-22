@@ -11,9 +11,13 @@ namespace EasyLua {
     public class EasyLuaGlobal : MonoBehaviour {
         private static EasyLuaGlobal instance = null;
 
-        public static EasyLuaGlobal Get() {
+        public static EasyLuaGlobal Get(bool create = true) {
             if (instance) {
                 return instance;
+            }
+
+            if (!create) {
+                return null;
             }
 
             var obj = new GameObject("EasyLuaGlobal");
