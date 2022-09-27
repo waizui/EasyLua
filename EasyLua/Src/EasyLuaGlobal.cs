@@ -36,7 +36,7 @@ namespace EasyLua {
                 // util.print_func_ref_by_csharp()";
                 // instance.mLuaEnv.DoString(c);
                 instance.mLuaEnv.Tick();
-                // 缓存luaFun之后 会导致引用在dispose的时候无法消除报错
+                // caching luaFun causes "reference not eliminated" error when trying to  dispose 
                 //instance.mLuaEnv.Dispose();
                 instance.mLuaEnv = null;
                 DestroyImmediate(instance.gameObject);
@@ -109,7 +109,7 @@ namespace EasyLua {
                 PushClass(lexer);
                 return lexer.GetBaseClassName();
             } catch (EasyLuaSyntaxError e) {
-                //普通lua脚本 直接执行
+                //regular lua script , execute directly
                 mLuaEnv.DoString(script);
                 return null;
             } catch (Exception e) {
@@ -122,7 +122,7 @@ namespace EasyLua {
         private void PushClass(EasyLuaLexer lexer) {
             var script = lexer.GetScript();
             var className = lexer.GetLuaClassName();
-            // chunk 要设置好 emmylua断点才能工作
+            // properly set chunk name so emmylua debugger can work
             mLuaEnv.DoString(script, className);
             var regCmd = $"RegClass({className},'{className}')";
             var baseClass = lexer.GetBaseClassName();

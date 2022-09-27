@@ -10,7 +10,7 @@ namespace EasyLua {
         private static void CreateLuaFile() {
             var selection = Selection.activeObject;
             if (!selection) {
-                Debug.LogError("请选中文件夹");
+                Debug.LogError("Select folder first!");
                 return;
             }
 
@@ -19,7 +19,7 @@ namespace EasyLua {
                 path = Path.GetDirectoryName(path);
             }
 
-            var name = EditorInputDialog.Show("提示", "输入类名", "");
+            var name = EditorInputDialog.Show("Info", "Please input class name", "");
             if (string.IsNullOrWhiteSpace(name)) {
                 return;
             }
