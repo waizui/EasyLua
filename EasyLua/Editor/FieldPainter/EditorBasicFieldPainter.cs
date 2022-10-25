@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using EasyLua.Lexer;
 using UnityEditor;
 using UnityEngine;
@@ -134,14 +135,61 @@ namespace EasyLua.Editor {
                 if (!code) {
                     continue;
                 }
+
                 var className = EasyLuaLexer.TrimExtension(code.name);
-                if (className != typeName) {
-                    continue;
+                if (className == typeName) {
+                    return curBehaviour;
                 }
-                return curBehaviour;
+
+                if (IsSubClassOf(className, typeName)) {
+                    return curBehaviour;
+                }
             }
 
             return null;
+        }
+
+        private bool IsSubClassOf(string luaClass, string targetClass) {
+            var fileName = luaClass + " t:TextAsset";
+            var guids = AssetDatabase.FindAssets(fileName);
+            if (guids == null || guids.Length == 0) {
+                return false;
+            }
+
+            string path = null;
+
+            for (int i = 0; i < guids.Length; i++) {
+                var p = AssetDatabase.GUIDToAssetPath(guids[i]);
+                if (p != null && p.EndsWith("lua.txt")) {
+                    // find raw lua file name same as class name
+                    var rawName = Path.GetFileNameWithoutExtension(p).Split('.')[0];
+                    if (rawName != luaClass) {
+                        continue;
+                    }
+                    path = p;
+                    break;
+                }
+            }
+
+            if (path == null) {
+                return false;
+            }
+
+
+            var script = (TextAsset)AssetDatabase.LoadAssetAtPath(path, typeof(TextAsset));
+            var lexer = new EasyLuaLexer(script.text);
+
+            var baseClass = lexer.GetBaseClassName();
+            if (!string.IsNullOrWhiteSpace(baseClass)) {
+                // not found keep searching
+                if (baseClass != targetClass) {
+                    return IsSubClassOf(baseClass, targetClass);
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         private bool DrawEnum(EasyLuaParam param, Type enumType) {

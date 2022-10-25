@@ -90,9 +90,9 @@ function RegClass(cls, name, baseClsName)
     __cls[name] = cls
 end
 
----@generic ClsType
----@param cls ClsType or string
----@return ClsType
+---@generic T
+---@param cls T | string
+---@return T
 function NewClass(cls, ...)
     local clsName = cls.__clsName or cls
     local class = __cls[clsName]
