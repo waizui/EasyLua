@@ -140,7 +140,17 @@ namespace EasyLua.Editor {
                 if (className == typeName) {
                     return curBehaviour;
                 }
+            }
 
+            // has not been found in siblings search the parent
+            for (int i = 0; i < components.Length; i++) {
+                var curBehaviour = components[i];
+                var code = curBehaviour.LuaCode;
+                if (!code) {
+                    continue;
+                }
+
+                var className = EasyLuaLexer.TrimExtension(code.name);
                 if (IsSubClassOf(className, typeName)) {
                     return curBehaviour;
                 }
