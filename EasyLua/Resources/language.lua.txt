@@ -1,11 +1,22 @@
 ﻿local __cls = {}
 
+---@param className string
+---@return any
+function FindClass(className)
+    if (not className) or (className == "") then
+        return nil
+    end
+
+    local base = __cls[className]
+    return base
+end
+
 local oopMetaTable = {
     __index = function(instance, key)
         local className = instance.__class.__clsName
         while (true) do
             -- search class template first 
-            local class = __FindBaseClass(className)
+            local class = FindClass(className)
             if (not class) then
                 -- TODO:performance issue when index nil 
                 return nil
@@ -32,8 +43,7 @@ local Class = {
         -- template is different to instence ,so searching the super class 
         local className = cls.__baseClsName
         while (true) do
-            -- 先找类型模板
-            local class = __FindBaseClass(className)
+            local class = FindClass(className)
             if (not class) then
                 -- TODO: performance when index nil
                 return nil
@@ -51,22 +61,14 @@ local Class = {
     end
 }
 
+---@return string
 function Class:GetClassName()
     return self.__clsName
 end
 
+---@return string
 function Class:GetBaseName()
     return self.__baseClsName
-end
-
----@return any
-function __FindBaseClass(className)
-    if (not className) or (className == "") then
-        return nil
-    end
-
-    local base = __cls[className]
-    return base
 end
 
 ---@param  cls Class
@@ -105,6 +107,12 @@ function NewClass(cls, ...)
         ctor(ins, ...)
     end
     return ins
+end
+
+---@param instance LuaObject
+---@return Class
+function ClassOf(instance)
+    return instance.__class
 end
 
 --- Ultimate super class  
