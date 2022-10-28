@@ -1,23 +1,20 @@
-﻿--[[
-
-]] -- require "strict.lua"
-local __cls = {}
+﻿local __cls = {}
 
 local oopMetaTable = {
     __index = function(instance, key)
         local className = instance.__class.__clsName
         while (true) do
-            -- 先找类型模板
+            -- search class template first 
             local class = __FindBaseClass(className)
             if (not class) then
-                -- TODO: index nil时性能问题
+                -- TODO:performance issue when index nil 
                 return nil
             end
 
             local classVal = rawget(class, key)
 
             if (classVal ~= nil) then
-                -- 缓存防止每次都重新找值
+                -- caching in order to prevent to search everytime 
                 rawset(instance, key, classVal)
                 return classVal
             end
@@ -26,25 +23,26 @@ local oopMetaTable = {
     end
 }
 
+-- class template
 ---@class Class
 local Class = {
     __clsName,
     __baseClsName,
     __index = function(cls, key)
-        -- 类型模板不同于实例 不用从从类型模板里找，所以直接找父类
+        -- template is different to instence ,so searching the super class 
         local className = cls.__baseClsName
         while (true) do
             -- 先找类型模板
             local class = __FindBaseClass(className)
             if (not class) then
-                -- TODO: index nil时性能问题
+                -- TODO: performance when index nil
                 return nil
             end
 
             local classVal = rawget(class, key)
 
             if (classVal ~= nil) then
-                -- 缓存防止每次都重新找值
+                -- caching
                 rawset(cls, key, classVal)
                 return classVal
             end
@@ -109,7 +107,7 @@ function NewClass(cls, ...)
     return ins
 end
 
----所有EasyLua类型的终极父类
+--- Ultimate super class  
 ---@class LuaObject
 local LuaObject = {__clsName = "LuaObject", __baseClsName = ""}
 
@@ -122,5 +120,3 @@ function LuaObject:GetBaseName()
 end
 
 RegClass(LuaObject, "LuaObject", "")
-
--- TODO:提供反射机制
