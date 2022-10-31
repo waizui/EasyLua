@@ -15,7 +15,7 @@ Open the lua script in your code editor, you will see:
     ExampleCode= {}
 ```
 
-* First of all , a class declaration must on the top of the script. It starts with "---@class" and followed with class name.
+* A class declaration must on the top of the script. It starts with "---@class" and followed with class name.
 If there are multiple classe declararions in one single script , you need to use EasyLua built-in function <b>RegClass</b>
 to Register Classes other than the first one.
 
@@ -198,7 +198,7 @@ that means debugger is working properly.
 
 
 
-## Advance Features
+## Advanced Features
 
 ### built-in fields:
 * you can access EasyBehaviour(or subclass of EasyBehaviour) instance through <b>self.this</b> in a lua script,
