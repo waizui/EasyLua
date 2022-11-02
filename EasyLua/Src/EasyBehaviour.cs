@@ -13,7 +13,7 @@ namespace EasyLua {
 
         [SerializeField, HideInInspector]
         private EasyLuaParam[] mLuaParams;
-
+        
         public LuaTable GetLuaInstance() {
             if (mEnv == null) {
                 InitLuaEnv();
@@ -35,14 +35,41 @@ namespace EasyLua {
             get { return mLuaCode; }
         }
 
-        protected virtual void Awake() {
+        public bool IsInitiated() {
+            return mEnv != null;
+        }
+
+        public string GetClassName() {
             if (mEnv == null) {
                 InitLuaEnv();
             }
+
+            return mEnv?.GetClassName();
         }
 
-        public bool IsInitiated() {
-            return mEnv != null;
+        // attach a class instance to this component
+        public void AttachLuaClass(string className) {
+            DestroyEnv();
+            mEnv = new EasyLuaEnv(className);
+            SetUnityFields();
+            CallLuaFun("Awake");
+        }
+
+        [System.Obsolete]
+        public void AddLuaScript(string script) {
+            DestroyEnv();
+            mEnv = new EasyLuaEnv(script, null);
+            SetUnityFields();
+        }
+
+        //push a object to lua environment
+        public void PushFieldToLua(string key, Object value) {
+            if (mEnv == null) {
+                Debug.LogError("EasyLuaEnv not initiated");
+                return;
+            }
+
+            mEnv.SetField(key, value);
         }
 
         private void InitLuaEnv() {
@@ -84,34 +111,10 @@ namespace EasyLua {
             }
         }
 
-        public string GetClassName() {
+        protected virtual void Awake() {
             if (mEnv == null) {
                 InitLuaEnv();
             }
-
-            return mEnv?.GetClassName();
-        }
-
-        public void AttachLuaClass(string className) {
-            DestroyEnv();
-            mEnv = new EasyLuaEnv(className);
-            SetUnityFields();
-            CallLuaFun("Awake");
-        }
-
-        public void AddLuaScript(string script) {
-            DestroyEnv();
-            mEnv = new EasyLuaEnv(script, null);
-            SetUnityFields();
-        }
-
-        public void PushFieldToLua(string key, Object value) {
-            if (mEnv == null) {
-                Debug.LogError("EasyLuaEnv not initiated");
-                return;
-            }
-
-            mEnv.SetField(key, value);
         }
 
         protected virtual void OnDestroy() {

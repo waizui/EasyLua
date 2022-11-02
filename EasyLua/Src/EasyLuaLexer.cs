@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime;
-using System.Text;
 using System.Text.RegularExpressions;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace EasyLua.Lexer {
@@ -51,6 +48,12 @@ namespace EasyLua.Lexer {
         private string mScript;
         private string mClassName;
 
+        public EasyLuaLexer(string script) {
+            Assert.IsFalse(string.IsNullOrWhiteSpace(script));
+            mScript = PrepareScript(script);
+            CompileClass();
+        }
+
         public string GetLuaClassName() {
             return mClassName;
         }
@@ -61,7 +64,15 @@ namespace EasyLua.Lexer {
             return mBaseName;
         }
 
+        public static string TrimExtension(string fileName) {
+            return Regex.Replace(fileName, @"(\.\w*)", "", RegexOptions.Compiled);
+        }
+
         private List<FieldToken> mFields = null;
+
+        public string GetScript() {
+            return mScript;
+        }
 
         public List<FieldToken> GetScriptFields() {
             if (mFields == null) {
@@ -71,10 +82,8 @@ namespace EasyLua.Lexer {
             return mFields;
         }
 
-        public EasyLuaLexer(string script) {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(script));
-            mScript = PrepareScript(script);
-            CompileClass();
+        public List<FieldToken> ReadFields() {
+            return ReadFieldsImpl();
         }
 
         private string PrepareScript(string script) {
@@ -104,10 +113,6 @@ namespace EasyLua.Lexer {
             return !sCommentRx.IsMatch(line);
         }
 
-        public string GetScript() {
-            return mScript;
-        }
-
         private void CompileClass() {
             var reader = new StringReader(mScript);
             var classDef = reader.ReadLine();
@@ -115,11 +120,10 @@ namespace EasyLua.Lexer {
             ReadClass(classDef);
         }
 
-
         private void ReadClass(string line) {
             var match = sClsNameRx.Match(line);
             if (!match.Success) {
-                throw new EasyLuaSyntaxError("class define syntax error 在第一行申明类型 file");
+                throw new EasyLuaSyntaxError("class define syntax error : class must be declared in first line ");
             }
 
             var groups = match.Groups;
@@ -139,9 +143,9 @@ namespace EasyLua.Lexer {
             }
         }
 
-        public List<FieldToken> ReadFields() {
+        public List<FieldToken> ReadFieldsImpl() {
             var reader = new StringReader(mScript);
-            // 去掉第一行
+            // ignore first line
             reader.ReadLine();
             var fields = new List<FieldToken>();
             while (true) {
@@ -199,8 +203,5 @@ namespace EasyLua.Lexer {
             return null;
         }
 
-        public static string TrimExtension(string fileName) {
-            return Regex.Replace(fileName, @"(\.\w*)", "", RegexOptions.Compiled);
-        }
     }
 }

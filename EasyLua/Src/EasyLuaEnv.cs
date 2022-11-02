@@ -18,20 +18,59 @@ namespace EasyLua {
             }
         }
 
-        private string mLualassName;
+        private string mLuaClassName;
         private string mFileName;
+        private Dictionary<string, LuaFun> mFunCaches = new Dictionary<string, LuaFun>();
 
+        [Obsolete]
         public EasyLuaEnv(string script, string fileName) {
             Assert.IsFalse(string.IsNullOrWhiteSpace(script));
-            mLualassName = LoadClass(script);
+            mLuaClassName = LoadClass(script);
             mFileName = fileName;
         }
 
         public EasyLuaEnv(string className) {
             Assert.IsFalse(string.IsNullOrWhiteSpace(className));
-            mLualassName = className;
+            mLuaClassName = className;
             InitClass(className);
         }
+
+        public string GetClassName() {
+            return mLuaClassName;
+        }
+
+        public void SetField<TKey, TValue>(TKey key, TValue value) {
+            mTable.Set(key, value);
+        }
+
+        public void PushParam(EasyLuaParam parameters) {
+            PushParamImpl(parameters);
+        }
+
+        // TODO: generic implement
+        public void CallLuaFun(string fun, params System.Object[] args) {
+            LuaFun luaFun = null;
+            if (mFunCaches.TryGetValue(fun, out luaFun)) {
+                if (luaFun != null) {
+                    luaFun(mTable, args);
+                }
+            } else {
+                mTable.Get(fun, out luaFun);
+                if (luaFun != null) {
+                    luaFun(mTable, args);
+                }
+
+                mFunCaches.Add(fun, luaFun);
+            }
+        }
+
+        public void Dispose() {
+            mFunCaches.Clear();
+            mFunCaches = null;
+            mTable.Dispose();
+            mTable = null;
+        }
+
 
         private void InitClass(string className) {
             var env = EasyLuaGlobal.Get();
@@ -45,16 +84,7 @@ namespace EasyLua {
             return cls;
         }
 
-
-        public string GetClassName() {
-            return mLualassName;
-        }
-
-        public void SetField<TKey, TValue>(TKey key, TValue value) {
-            mTable.Set(key, value);
-        }
-
-        public void PushParam(EasyLuaParam parameters) {
+        private void PushParamImpl(EasyLuaParam parameters) {
             if (parameters == null) {
                 Debug.LogError("error: try push null parameter to lua");
                 return;
@@ -94,12 +124,10 @@ namespace EasyLua {
                 case EasyLuaParamType.UnityObject:
                     PushUnityObject(parameters, table, fieldName);
                     break;
-
                 default:
                     TryPushParam(parameters);
                     break;
             }
-
         }
 
         private void TryPushParam(EasyLuaParam parameters) {
@@ -176,30 +204,5 @@ namespace EasyLua {
             return param.Cast();
         }
 
-        private Dictionary<string, LuaFun> mFunCaches = new Dictionary<string, LuaFun>();
-
-        // TODO: 添加泛型实现
-        public void CallLuaFun(string fun, params System.Object[] args) {
-            LuaFun luaFun = null;
-            if (mFunCaches.TryGetValue(fun, out luaFun)) {
-                if (luaFun != null) {
-                    luaFun(mTable, args);
-                }
-            } else {
-                mTable.Get(fun, out luaFun);
-                if (luaFun != null) {
-                    luaFun(mTable, args);
-                }
-
-                mFunCaches.Add(fun, luaFun);
-            }
-        }
-
-        public void Dispose() {
-            mFunCaches.Clear();
-            mFunCaches = null;
-            mTable.Dispose();
-            mTable = null;
-        }
     }
 }

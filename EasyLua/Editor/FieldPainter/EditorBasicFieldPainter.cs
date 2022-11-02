@@ -72,7 +72,7 @@ namespace EasyLua.Editor {
             return false;
         }
 
-        public bool IsBool(EasyLuaParam para) {
+        private bool IsBool(EasyLuaParam para) {
             var name = para.LowerTypeName;
             return name == "bool" || name == "system.boolean";
         }
@@ -88,7 +88,7 @@ namespace EasyLua.Editor {
             return false;
         }
 
-        public bool IsString(EasyLuaParam para) {
+        private bool IsString(EasyLuaParam para) {
             var name = para.LowerTypeName;
             return name == "string" || name == "system.string";
         }
@@ -220,7 +220,7 @@ namespace EasyLua.Editor {
             return false;
         }
 
-        public bool IsArray(EasyLuaParam para) {
+        private bool IsArray(EasyLuaParam para) {
             return para.IsArray();
         }
 

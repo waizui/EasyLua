@@ -51,8 +51,28 @@ namespace EasyLua {
         private LuaEnv mLuaEnv;
         private LuaTable mEnvTable;
 
+        public string LoadClass(string script) {
+            return LoadLua(script);
+        }
+
+        public void BulkLoadClass(IEnumerable<string> loader) {
+            Assert.IsNotNull(loader);
+            foreach (var script in loader) {
+                LoadLua(script);
+            }
+        }
+
+        // create a class instance in global environment
+        public LuaTable NewClass(string className, params object[] paras) {
+            return NewClassImpl(className, paras);
+        }
+
         private void Awake() {
             InitLuaEnv();
+        }
+
+        private void Start() {
+            StartCoroutine(CoTickLuaEnv());
         }
 
         private void InitLuaEnv() {
@@ -80,10 +100,6 @@ namespace EasyLua {
             } catch {
                 // ignored
             }
-        }
-
-        private void Start() {
-            StartCoroutine(CoTickLuaEnv());
         }
 
         private IEnumerator CoTickLuaEnv() {
@@ -133,18 +149,7 @@ namespace EasyLua {
             mLuaEnv.DoString(regCmd);
         }
 
-        public string LoadClass(string script) {
-            return LoadLua(script);
-        }
-
-        public void BulkLoadClass(IEnumerable<string> loader) {
-            Assert.IsNotNull(loader);
-            foreach (var script in loader) {
-                LoadLua(script);
-            }
-        }
-
-        public LuaTable NewClass(string className, params object[] paras) {
+        private LuaTable NewClassImpl(string className, params object[] paras) {
             var hasArgs = (paras != null && paras.Length != 0);
             if (hasArgs) {
                 var args = mLuaEnv.DoString("local paraTable={} return paraTable");
@@ -163,6 +168,7 @@ namespace EasyLua {
             var t = ret[0] as LuaTable;
             mLuaEnv.DoString("paraTable=nil");
             return t;
+
         }
     }
 }
