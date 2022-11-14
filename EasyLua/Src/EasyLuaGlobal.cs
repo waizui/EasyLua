@@ -67,6 +67,12 @@ namespace EasyLua {
             return NewClassImpl(className, paras);
         }
 
+        // directly execute lua script
+        public void ExecuteString(string content) {
+            mLuaEnv.DoString(content);
+        }
+
+
         private void Awake() {
             InitLuaEnv();
         }

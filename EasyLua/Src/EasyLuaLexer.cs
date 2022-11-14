@@ -45,6 +45,8 @@ namespace EasyLua.Lexer {
         private static Regex sFieldNameRx = new Regex(Field_NAME_PAT, RegexOptions.Compiled);
         private static Regex sCommentRx = new Regex(COMMENT_PAT, RegexOptions.Compiled);
 
+        private List<FieldToken> mFields = null;
+
         private string mScript;
         private string mClassName;
 
@@ -68,7 +70,6 @@ namespace EasyLua.Lexer {
             return Regex.Replace(fileName, @"(\.\w*)", "", RegexOptions.Compiled);
         }
 
-        private List<FieldToken> mFields = null;
 
         public string GetScript() {
             return mScript;
@@ -82,7 +83,7 @@ namespace EasyLua.Lexer {
             return mFields;
         }
 
-        public List<FieldToken> ReadFields() {
+        private List<FieldToken> ReadFields() {
             return ReadFieldsImpl();
         }
 
@@ -116,7 +117,7 @@ namespace EasyLua.Lexer {
         private void CompileClass() {
             var reader = new StringReader(mScript);
             var classDef = reader.ReadLine();
-            // 第一行要写类型申明
+            // declare class in first line
             ReadClass(classDef);
         }
 
