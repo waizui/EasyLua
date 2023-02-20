@@ -233,12 +233,15 @@ namespace EasyLua.Editor {
             var arr = para.Array;
             var valid = arr != null && arr.Length > 0;
             var oldSize = valid ? arr.Length : 0;
+
+            EditorGUI.indentLevel++;
             var newSize = EditorGUILayout.IntField("Size", oldSize);
 
             var changed = false;
             if (oldSize != newSize) {
                 if (newSize == 0) {
                     para.Array = null;
+                    EditorGUI.indentLevel--;
                     return true;
                 }
 
@@ -254,6 +257,7 @@ namespace EasyLua.Editor {
             }
 
             if (newSize == 0) {
+                EditorGUI.indentLevel--;
                 return false;
             }
 
@@ -265,6 +269,7 @@ namespace EasyLua.Editor {
                     para.Array[i] = subPara;
                 }
 
+
                 subPara.TypeName = para.TypeName;
                 subPara.name = $"element{i}";
                 var elementChanged = EditorFieldPainter.Draw(subPara);
@@ -273,6 +278,7 @@ namespace EasyLua.Editor {
                 }
             }
 
+            EditorGUI.indentLevel--;
             return changed;
         }
 
