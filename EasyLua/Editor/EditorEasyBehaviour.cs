@@ -189,11 +189,11 @@ namespace EasyLua.Editor {
                 return null;
             }
 
-            var newParas = fields.Select((f) => new EasyLuaParam()
-            {
+            var newParas = fields.Select((f) => new EasyLuaParam() {
                 TypeName = f.GetFieldType(),
-                name = f.GetFieldName()
+                name = f.GetFieldName(),
             }).ToArray();
+
             newParas = GetParamsDic(newParas).Values.ToArray();
             var origin = mLua.GetLuaParams();
             var dirty = false;
@@ -222,6 +222,7 @@ namespace EasyLua.Editor {
             }
             return newParas;
         }
+
 
         private bool IsParamsCountEqual(EasyLuaParam[] origin, EasyLuaParam[] target) {
             if (origin == null && target == null) {
