@@ -12,6 +12,8 @@ namespace EasyLua {
 
         public GameObject testObject;
 
+		public TextAsset[] luaScripts;
+
         private void Awake() {
             StartCoroutine(CoLoadClass());
         }
@@ -24,7 +26,7 @@ namespace EasyLua {
         /// </summary>
         /// <returns></returns>
         IEnumerator CoLoadClass() {
-            TextAsset[] assets = GetLuaFiles();
+            TextAsset[] assets = luaScripts;
             for (int i = 0 ; i < assets.Length ; i++) {
                 try {
                     EasyLuaGlobal.Get().LoadClass(assets[i].text);
@@ -39,16 +41,6 @@ namespace EasyLua {
             // after all lua scripts are loaded the EasyLua can work properly
             var obj = GameObject.Instantiate(testObject, transform);
             obj.SetActive(true);
-        }
-
-        private TextAsset[] GetLuaFiles() {
-            var folder = new string[] { "Assets/EasyLua/Examples/Code" };
-            var assets = AssetDatabase.FindAssets("t:TextAsset", folder);
-            var codes = assets.Select((g) => {
-                var path = AssetDatabase.GUIDToAssetPath(g);
-                return AssetDatabase.LoadAssetAtPath<TextAsset>(path);
-            });
-            return codes.ToArray();
         }
 #endif
     }
