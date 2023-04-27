@@ -20,7 +20,11 @@ namespace EasyLua {
 
                 return mTypeName;
             }
-            set { mTypeName = value; }
+
+            set {
+                mTypeName = value;
+                mType = (int)ConvertFieldType(this);
+            }
         }
 
         public string RawTypeName {
@@ -172,6 +176,41 @@ namespace EasyLua {
             mType = (int)type;
         }
 
+        private EasyLuaParamType ConvertFieldType(EasyLuaParam para) {
+            if (IsInt()) {
+                return EasyLuaParamType.Int;
+            } else if (IsFloat()) {
+                return EasyLuaParamType.Float;
+            } else if (IsString()) {
+                return EasyLuaParamType.String;
+            } else if (IsBool()) {
+                return EasyLuaParamType.Boolean;
+            } else if (IsArray()) {
+                return EasyLuaParamType.Array;
+            } else {
+                return EasyLuaParamType.None;
+            }
+        }
+
+        private bool IsInt() {
+            var name = LowerTypeName;
+            return name == "number" || name == "system.int32";
+        }
+
+        private bool IsFloat() {
+            var name = LowerTypeName;
+            return name == "float" || name == "system.single";
+        }
+
+        private bool IsBool() {
+            var name = LowerTypeName;
+            return name == "bool" || name == "system.boolean";
+        }
+
+        private bool IsString() {
+            var name = LowerTypeName;
+            return name == "string" || name == "system.string";
+        }
 
         public bool IsArray() {
             if (string.IsNullOrEmpty(mTypeName)) {

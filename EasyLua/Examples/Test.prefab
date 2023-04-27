@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3787949540201495297}
   m_RootOrder: 1
@@ -52,10 +53,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -80,6 +83,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &5417478837881523361
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -105,7 +109,7 @@ GameObject:
   - component: {fileID: 3787949540201495296}
   - component: {fileID: 3787949540201495311}
   - component: {fileID: 3787949540201495310}
-  - component: {fileID: 3787949540201495309}
+  - component: {fileID: 6207780430537825736}
   m_Layer: 0
   m_Name: Test
   m_TagString: Untagged
@@ -123,6 +127,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7021423071533750287}
   - {fileID: 1798672256741842247}
@@ -148,10 +153,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -176,6 +183,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &3787949540201495310
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -189,7 +197,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3787949540201495309
+--- !u!114 &6207780430537825736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,142 +206,161 @@ MonoBehaviour:
   m_GameObject: {fileID: 3787949540201495308}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62a1871c0d7686d4e9b456c2f6845f13, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f272f0182416f344b7e4c9d9db4f62b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mLuaCode: {fileID: 4900000, guid: d136e4f3226b4154aa4eb13e2e2a4ab2, type: 3}
+  mLuaCode: {fileID: 4900000, guid: d94cc02129dc5c449b45425b1e51d34a, type: 3}
   mLuaParams:
   - name: baseCount
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 1
   - name: speed
     intVal: 10
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 1
   - name: progress
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 2
   - name: color
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 1
+      rid: 2391944183931994122
     arrObj: []
+    mType: 7
   - name: vec3
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 2
+      rid: -2
     arrObj: []
+    mType: 0
   - name: cam
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 8
   - name: obj
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 0
   - name: string
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: stringvalue
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 5
   - name: bool
     intVal: 0
     floatVal: 0
-    boolVal: -1
+    boolVal: 1
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 3
   - name: array
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj:
-    - id: 3
-    - id: 4
+    - rid: 2391944183931994123
+    - rid: 2391944183931994124
+    mType: 4
   - name: intArray
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
+    enumVal: -1
     unityObj: {fileID: 0}
     valObj:
-      id: 0
+      rid: -2
     arrObj:
-    - id: 5
-    - id: 6
-    - id: 7
+    - rid: 2391944183931994125
+    - rid: 2391944183931994126
+    - rid: 2391944183931994127
+    mType: 4
   - name: luaRef
     intVal: 0
     floatVal: 0
     boolVal: 0
     stringVal: 
-    unityObj: {fileID: 3787949540201495309}
+    enumVal: -1
+    unityObj: {fileID: 6207780430537825736}
     valObj:
-      id: 0
+      rid: -2
     arrObj: []
+    mType: 8
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: -2
       type: {class: , ns: , asm: }
-    00000001:
+    - rid: 2391944183931994122
       type: {class: Color, ns: UnityEngine, asm: UnityEngine.CoreModule}
       data:
         r: 1
-        g: 0
-        b: 0
+        g: 0.10062885
+        b: 0.10062885
         a: 1
-    00000002:
-      type: {class: Vector3, ns: UnityEngine, asm: UnityEngine.CoreModule}
-      data:
-        x: 0
-        y: 0
-        z: 0
-    00000003:
+    - rid: 2391944183931994123
       type: {class: EasyLuaParam, ns: EasyLua, asm: Assembly-CSharp}
       data:
         name: element0
@@ -341,11 +368,13 @@ MonoBehaviour:
         floatVal: 0
         boolVal: 0
         stringVal: 
+        enumVal: -1
         unityObj: {fileID: 4590990494212644683}
         valObj:
-          id: 0
+          rid: -2
         arrObj: []
-    00000004:
+        mType: 0
+    - rid: 2391944183931994124
       type: {class: EasyLuaParam, ns: EasyLua, asm: Assembly-CSharp}
       data:
         name: element1
@@ -353,11 +382,13 @@ MonoBehaviour:
         floatVal: 0
         boolVal: 0
         stringVal: 
+        enumVal: -1
         unityObj: {fileID: 113722489018494349}
         valObj:
-          id: 0
+          rid: -2
         arrObj: []
-    00000005:
+        mType: 0
+    - rid: 2391944183931994125
       type: {class: EasyLuaParam, ns: EasyLua, asm: Assembly-CSharp}
       data:
         name: element0
@@ -365,11 +396,13 @@ MonoBehaviour:
         floatVal: 0
         boolVal: 0
         stringVal: 
+        enumVal: -1
         unityObj: {fileID: 0}
         valObj:
-          id: 0
+          rid: -2
         arrObj: []
-    00000006:
+        mType: 1
+    - rid: 2391944183931994126
       type: {class: EasyLuaParam, ns: EasyLua, asm: Assembly-CSharp}
       data:
         name: element1
@@ -377,11 +410,13 @@ MonoBehaviour:
         floatVal: 0
         boolVal: 0
         stringVal: 
+        enumVal: -1
         unityObj: {fileID: 0}
         valObj:
-          id: 0
+          rid: -2
         arrObj: []
-    00000007:
+        mType: 1
+    - rid: 2391944183931994127
       type: {class: EasyLuaParam, ns: EasyLua, asm: Assembly-CSharp}
       data:
         name: element2
@@ -389,10 +424,12 @@ MonoBehaviour:
         floatVal: 0
         boolVal: 0
         stringVal: 
+        enumVal: -1
         unityObj: {fileID: 0}
         valObj:
-          id: 0
+          rid: -2
         arrObj: []
+        mType: 1
 --- !u!1 &4590990494212644683
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +459,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3787949540201495297}
   m_RootOrder: 0
@@ -445,10 +483,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -473,6 +513,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &7553662662870891072
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -20,29 +20,33 @@ namespace EasyLua.Editor {
     }
 
     public class EditorBasicFieldPainter {
+
         public virtual bool Draw(EasyLuaParam para) {
             var changed = false;
-            if (IsInt(para)) {
-                changed = DrawNumber(para);
-            } else if (IsFloat(para)) {
-                changed = DrawFloat(para);
-            } else if (IsString(para)) {
-                changed = DrawString(para);
-            } else if (IsBool(para)) {
-                changed = DrawBool(para);
-            } else if (IsArray(para)) {
-                changed = DrawArray(para);
-            } else {
-                changed = DrawObject(para);
+            switch (para.ParamType) {
+                case EasyLuaParamType.Int:
+                    changed = DrawNumber(para);
+                    break;
+                case EasyLuaParamType.Float:
+                    changed = DrawFloat(para);
+                    break;
+                case EasyLuaParamType.String:
+                    changed = DrawString(para);
+                    break;
+                case EasyLuaParamType.Boolean:
+                    changed = DrawBool(para);
+                    break;
+                case EasyLuaParamType.Array:
+                    changed = DrawArray(para);
+                    break;
+                default:
+                    changed = DrawObject(para);
+                    break;
             }
 
             return changed;
         }
 
-        private bool IsInt(EasyLuaParam para) {
-            var name = para.LowerTypeName;
-            return name == "number" || name == "system.int32";
-        }
 
         private bool DrawNumber(EasyLuaParam para) {
             var prev = para.Int;
@@ -53,12 +57,6 @@ namespace EasyLua.Editor {
             }
 
             return false;
-        }
-
-
-        private bool IsFloat(EasyLuaParam para) {
-            var name = para.LowerTypeName;
-            return name == "float" || name == "system.single";
         }
 
         private bool DrawFloat(EasyLuaParam para) {
@@ -72,11 +70,6 @@ namespace EasyLua.Editor {
             return false;
         }
 
-        private bool IsBool(EasyLuaParam para) {
-            var name = para.LowerTypeName;
-            return name == "bool" || name == "system.boolean";
-        }
-
         private bool DrawBool(EasyLuaParam para) {
             var prev = para.Bool;
             var newVal = EditorGUILayout.Toggle(para.name, prev);
@@ -86,11 +79,6 @@ namespace EasyLua.Editor {
             }
 
             return false;
-        }
-
-        private bool IsString(EasyLuaParam para) {
-            var name = para.LowerTypeName;
-            return name == "string" || name == "system.string";
         }
 
         private bool DrawString(EasyLuaParam para) {
@@ -220,10 +208,6 @@ namespace EasyLua.Editor {
             return false;
         }
 
-        private bool IsArray(EasyLuaParam para) {
-            return para.IsArray();
-        }
-
         private bool DrawArray(EasyLuaParam para) {
             para.arryFold = EditorGUILayout.Foldout(para.arryFold, para.name);
             if (!para.arryFold) {
@@ -269,8 +253,9 @@ namespace EasyLua.Editor {
                     para.Array[i] = subPara;
                 }
 
+				//might be read from a serialized prefab need reassign value
+                subPara.TypeName ??= para.TypeName;
 
-                subPara.TypeName = para.TypeName;
                 subPara.name = $"element{i}";
                 var elementChanged = EditorFieldPainter.Draw(subPara);
                 if (elementChanged) {
