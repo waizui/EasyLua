@@ -170,7 +170,7 @@ if CS.UnityEngine.Application.platform == CS.UnityEngine.RuntimePlatform.Windows
 end
 ```
 
-The next step is create a lua debugger in you IDE. After this, open the launch settigns, change the port number to 9966,and set the "ideConnectDebugger" option to false.
+The next step is creating a lua debugger in you IDE. After this, open the launch settigns, change the port number to 9966,and set the "ideConnectDebugger" option to false.
 
 ```Json
 {
