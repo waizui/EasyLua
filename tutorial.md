@@ -193,7 +193,7 @@ The next step is creating a lua debugger in you IDE. After this, open the launch
             ]
 }
 ```
-And finally, start debugging in the IDE and then run unity editor. If everything going right,you'll see "connected" on your IDE console,
+And finally, start debugging in the IDE and then run unity editor. If everything going ,you'll see "connected" on your IDE console,
 that means debugger is working properly.
 
 
