@@ -1,7 +1,7 @@
 # EasyLua tutorial
 
 ## Dependencies
-First of all, [xlua](https://github.com/Tencent/xLua) project is required, you need include xlua in your project.
+First of all, [xlua](https://github.com/Tencent/xLua) project is required, you need to include xlua in your project.
 
 ## Create a lua script
 
